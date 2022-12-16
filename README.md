@@ -10,4 +10,4 @@ As a User, you can send an HTTP request specifying rules for when a VM should:
 
 Here's a confidential diagram with the architecture of this enterprised app:  
 
-![schema](https://user-images.githubusercontent.com/56227920/208008612-dbb1f3fb-cd72-4e49-b149-5301602788bd.png)
+![schema](https://user-images.githubusercontent.com/56227920/208011123-b69421f2-b205-48f3-bcec-3d1a1b077b0e.png)
