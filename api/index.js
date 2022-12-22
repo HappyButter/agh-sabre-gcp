@@ -10,4 +10,9 @@ app.get('/', function (req, res) {
   res.send('Hello World')
 })
 
-app.listen(process.env.PORT || 3000)
+
+const port = parseInt(process.env.PORT) || 3000;
+app.listen(port, () => {
+	console.log(`Server listening`);
+	console.log(`Listening on port ${port}`);
+})
