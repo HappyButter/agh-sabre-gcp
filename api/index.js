@@ -1,5 +1,5 @@
 import express from 'express'
-const {GoogleAuth} = require('google-auth-library');
+import {GoogleAuth} from 'google-auth-library';
 
 const app = express()
 
@@ -25,7 +25,7 @@ app.get('/vm/list', async (req, res) => {
 	} catch (err) {
 		console.log(err);
 		res.status(400).send(err);
-	  }
+	}
 })
 
 const port = parseInt(process.env.PORT) || 3000;
