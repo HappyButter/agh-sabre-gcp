@@ -1,6 +1,7 @@
 import express from 'express'
-import axios from 'axios';
+import {GoogleAuth} from 'google-auth-library';
 
+const auth = new GoogleAuth();
 const app = express()
 
 app.use(express.json());
@@ -15,7 +16,8 @@ app.get('/vm/list', async (req, res) => {
 	
 	try {
 		const url = `https://us-central1-sabre-winter-course-2022.cloudfunctions.net/list-vms`;
-		const response = await axios.get( url );
+		const client = await auth.getIdTokenClient(url);
+		const response = await client.request({url});
 	
 		res.status(200).json(response.data);
 	} catch (err) {
