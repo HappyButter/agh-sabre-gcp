@@ -6,7 +6,6 @@ const listAllInstances = async (req, res) =>  {
   try {
     const projectId = await instancesClient.getProjectId();
 
-    //Use the `maxResults` parameter to limit the number of results that the API returns per response page.
     const aggListRequest = instancesClient.aggregatedListAsync({
       project: projectId,
     });

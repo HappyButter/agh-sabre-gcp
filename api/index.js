@@ -1,5 +1,5 @@
 import express from 'express'
-import {GoogleAuth} from 'google-auth-library';
+import axios from 'axios';
 
 const app = express()
 
@@ -14,12 +14,8 @@ app.get('/', (req, res) => {
 app.get('/vm/list', async (req, res) => {
 	
 	try {
-		const auth = new GoogleAuth({
-			scopes: 'https://www.googleapis.com/auth/cloud-platform'
-		});
-		const client = await auth.getClient();
 		const url = `https://us-central1-sabre-winter-course-2022.cloudfunctions.net/list-vms`;
-		const response = await client.request({ url });
+		const response = await axios.get( url );
 	
 		res.status(200).json(response.data);
 	} catch (err) {
