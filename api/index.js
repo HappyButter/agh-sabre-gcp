@@ -36,22 +36,12 @@ app.get('/vm/schedule/list', async (req, res) => {
 	try {
 		let aggregatedResponse = [];
 
-		const request = {
-			name: `projects/${projectName}`,
-			auth: auth,
-		  };
-		
-		  let response;
-		  do {
-			if (response && response.nextPageToken) {
-			  request.pageToken = response.nextPageToken;
-			}
+		const parentList = await getSupportedLocationsList();
 
-			response = (await cloudscheduler.projects.locations.list(request)).data;
-			const currentLocationsNames = response?.locations?.map(el => el.name) || [];
-			aggregatedResponse = [...aggregatedResponse, ...currentLocationsNames];
-			
-		  } while (response.nextPageToken);
+		for(let i = 0; i < parentList.length; i++) {
+			const jobs = await getJobsByParent(parentList[i]);
+			aggregatedResponse = [...aggregatedResponse, ...jobs]
+		}
 	
 		res.status(200).json(aggregatedResponse);
 	} catch (err) {
@@ -59,6 +49,51 @@ app.get('/vm/schedule/list', async (req, res) => {
 		res.status(400).send(err);
 	}
 })
+
+async function getSupportedLocationsList()  {
+	let aggregatedResponse = [];
+
+	const request = {
+		name: `projects/${projectName}`,
+		auth: auth,
+	};
+	
+	let response;
+	do {
+		if (response && response.nextPageToken) {
+		request.pageToken = response.nextPageToken;
+		}
+
+		response = (await cloudscheduler.projects.locations.list(request)).data;
+		const currentLocationsNames = response?.locations?.map(el => el.name) || [];
+		aggregatedResponse = [...aggregatedResponse, ...currentLocationsNames];
+
+	} while (response.nextPageToken);
+
+	return aggregatedResponse;
+}
+
+async function getJobsByParent(parent='') {
+	let aggregatedResponse = [];
+	const request = {
+		parent: parent, 
+		auth: auth,
+	  };
+	
+	  let response;
+	  do {
+		if (response && response.nextPageToken) {
+		  request.pageToken = response.nextPageToken;
+		}
+		response = (await cloudscheduler.projects.locations.jobs.list(request)).data;
+		const currentJobs = response?.jobs || [];
+		if (currentJobs) {
+			aggregatedResponse = [...aggregatedResponse, ...currentJobs];
+		}
+	  } while (response.nextPageToken);
+
+	return aggregatedResponse;
+}
 
 const port = parseInt(process.env.PORT) || 3000;
 app.listen(port, () => {
