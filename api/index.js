@@ -32,7 +32,66 @@ app.get('/vm/list', async (req, res) => {
 	}
 })
 
-app.get('/vm/schedule/list', async (req, res) => {
+app.post('/schedule/resume', async (req, res) => {
+	try {
+		const { jobName } = req.body;
+
+		const request = {
+			name: jobName, 
+			auth: auth,
+		  };
+		
+		const response = (await cloudscheduler.projects.locations.jobs.resume(request)).data;
+	
+		res.status(200).json(response);
+	} catch (err) {
+		console.log(err);
+		res.status(400).send(err);
+	}
+})
+
+app.post('/schedule/pause', async (req, res) => {
+	try {
+		const { jobName } = req.body;
+
+		const request = {
+			name: jobName, 
+			auth: auth,
+		  };
+		
+		const response = (await cloudscheduler.projects.locations.jobs.pause(request)).data;
+	
+		res.status(200).json(response);
+	} catch (err) {
+		console.log(err);
+		res.status(400).send(err);
+	}
+})
+
+app.post('/schedule/create', async (req, res) => {
+	try {
+		let { parent, resource } = req.body;
+
+		let buff = new Buffer(JSON.stringify(resource?.httpTarget?.body) || "");
+		let base64httpTargetBody = buff.toString('base64');
+		resource = {...resource, httpTarget: {...resource.httpTarget, body: base64httpTargetBody}}
+
+		const request = {
+			parent: parent, 
+			auth: auth,
+			resource: resource
+		  };
+		
+		const response = (await cloudscheduler.projects.locations.jobs.create(request)).data;
+	
+		res.status(200).json(response);
+	} catch (err) {
+		console.log(err);
+		res.status(400).send(err);
+	}
+})
+
+app.get('/schedule/list', async (req, res) => {
 	try {
 		let aggregatedResponse = [];
 
