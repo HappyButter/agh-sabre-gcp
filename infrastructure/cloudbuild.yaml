@@ -1,0 +1,21 @@
+steps:
+  - id: 'tf init'
+    name: 'hashicorp/terraform:4.34.0'
+    entrypoint: sh
+    args: ["-c","terraform -chdir=infrastructure init -upgrade "]
+  - id: 'tf plan'
+    name: 'hashicorp/terraform:4.34.0'
+    entrypoint: sh
+    args: ["-c","terraform -chdir=infrastructure plan  -out=plan.out"]    
+  - id: 'tf apply'
+    name: 'hashicorp/terraform:4.34.0'
+    entrypoint: sh
+    args: ["-c","terraform -chdir=infrastructure apply plan.out"]    
+  - id: 'tf destroy'
+    name: 'hashicorp/terraform:4.34.0'
+    entrypoint: sh
+    args: ["-c","terraform -chdir=infrastructure plan -destroy -out=plan.out"]    
+  - id: 'tf destroy plan'
+    name: 'hashicorp/terraform:4.34.0'
+    entrypoint: sh
+    args: ["-c","terraform -chdir=infrastructure apply plan.out"]    
