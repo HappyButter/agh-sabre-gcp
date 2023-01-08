@@ -7,6 +7,12 @@ terraform {
   }
 }
 
+provider "google" {
+  project     = var.project_id
+  region      = var.region
+  zone        = var.zone
+}
+
 resource "google_storage_bucket" "function_bucket" {
     name     = var.project_id
     location = var.region
