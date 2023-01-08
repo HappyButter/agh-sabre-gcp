@@ -47,6 +47,5 @@ resource "google_cloudfunctions_function" "list_vms_test" {
 
   depends_on   = [
     google_storage_bucket_object.list_vms_zip,
-    google_pubsub_topic.topic
   ]
 }
