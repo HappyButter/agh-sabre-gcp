@@ -19,3 +19,5 @@ steps:
     name: 'hashicorp/terraform:1.0.0'
     entrypoint: sh
     args: ["-c","terraform -chdir=infrastructure apply plan.out"]    
+options:
+  logging: CLOUD_LOGGING_ONLY
