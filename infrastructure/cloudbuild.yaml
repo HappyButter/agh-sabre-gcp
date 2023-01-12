@@ -1,23 +1,27 @@
 steps:
   - id: 'tf init'
     name: 'hashicorp/terraform:1.0.0'
-    entrypoint: sh
-    args: ["-c","terraform -chdir=infrastructure init -upgrade "]
+    entrypoint: 'sh'
+    args: 
+    - '-c'
+    - | 
+        cd infrastructure
+        terraform init
   - id: 'tf plan'
     name: 'hashicorp/terraform:1.0.0'
-    entrypoint: sh
-    args: ["-c","terraform -chdir=infrastructure plan  -out=plan.out"]    
+    entrypoint: 'sh'
+    args: 
+    - '-c'
+    - | 
+        cd infrastructure
+        terraform plan
   - id: 'tf apply'
     name: 'hashicorp/terraform:1.0.0'
-    entrypoint: sh
-    args: ["-c","terraform -chdir=infrastructure apply plan.out"]    
-  - id: 'tf destroy'
-    name: 'hashicorp/terraform:1.0.0'
-    entrypoint: sh
-    args: ["-c","terraform -chdir=infrastructure plan -destroy -out=plan.out"]    
-  - id: 'tf destroy plan'
-    name: 'hashicorp/terraform:1.0.0'
-    entrypoint: sh
-    args: ["-c","terraform -chdir=infrastructure apply plan.out"]    
+    entrypoint: 'sh'
+    args: 
+    - '-c'
+    - | 
+        cd infrastructure
+        terraform apply
 options:
   logging: CLOUD_LOGGING_ONLY
